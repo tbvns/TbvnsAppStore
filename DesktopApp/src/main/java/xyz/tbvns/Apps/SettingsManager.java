@@ -87,20 +87,9 @@ public class SettingsManager {
                     p.add(textField);
                     p.add(new JButton("Save"){{
                         addActionListener(a -> {
-                            try {
-                                settings.getAutoExecList().add(textField.getText());
-                                FileUtils.writeStringToFile(
-                                        app.getConfigFile(),
-                                        new ObjectMapper()
-                                                .writerWithDefaultPrettyPrinter()
-                                                .writeValueAsString(settings),
-                                        Charset.defaultCharset(),
-                                        false
-                                );
-                                f.dispose();
-                                frame.get().dispose();
-                                frame.set(showAutoStart(app));
-                            } catch (Exception e){}
+                            f.dispose();
+                            list.getAutoExec().add(textField.getText());
+                            list.redraw();
                         });
                     }});
                     f.setContentPane(p);
@@ -135,59 +124,74 @@ public class SettingsManager {
     }
 
     private static class autoExecList extends JScrollPane {
+        private JPanel listPanel;
+
         @Getter
         private List<String> autoExec;
         public autoExecList(List<String> autoExec) {
             JPanel panel = new JPanel();
+            listPanel = panel;
             this.autoExec = autoExec;
             for (String s : autoExec) {
-                JPanel line = new JPanel();
-                JLabel label = new JLabel(s){{
-                    setPreferredSize(new Dimension(100, 30));
-                }};
-                line.add(label);
-                line.add(new JButton("-"){{
-                    setPreferredSize(new Dimension(30,30));
-                    addActionListener(a -> {
-                        panel.remove(line);
-                        panel.repaint();
-                        autoExec.remove(s);
-                    });
-                }});
-                line.add(new JButton("E"){{
-                    setPreferredSize(new Dimension(30,30));
-                    addActionListener(a -> {
-                        JFrame frame = new JFrame("");
-                        frame.setSize(200, 80);
-                        frame.setResizable(false);
-                        JPanel p = new JPanel();
-                        JTextField textField = new JTextField(){{
-                            setText(s);
-                        }};
-                        p.add(textField);
-                        p.add(new JButton("Save"){{
-                            addActionListener(a -> {
-                                for (int i = 0; i < autoExec.size(); i++) {
-                                    if (autoExec.get(i).equals(s)) {
-                                        autoExec.set(i, textField.getText());
-                                        break;
-                                    }
-                                }
-                                label.setText(textField.getText());
-                                frame.dispose();
-                            });
-                        }});
-                        frame.setContentPane(p);
-                        WindowUtils.center(frame);
-                        frame.setVisible(true);
-                    });
-                }});
-                panel.add(line);
+                addExec(s);
             }
 
             panel.setPreferredSize(new Dimension(175, autoExec.size() * 45 * 10));
             setPreferredSize(new Dimension(200, 200));
             setViewportView(panel);
+        }
+
+        public void redraw() {
+            listPanel.removeAll();
+            for (String s : autoExec) {
+                addExec(s);
+            }
+        }
+
+        public void addExec(String s) {
+            JPanel line = new JPanel();
+            JLabel label = new JLabel(s){{
+                setPreferredSize(new Dimension(100, 30));
+            }};
+            line.add(label);
+            line.add(new JButton("-"){{
+                setPreferredSize(new Dimension(30,30));
+                addActionListener(a -> {
+                    listPanel.remove(line);
+                    listPanel.repaint();
+                    autoExec.remove(s);
+                });
+            }});
+            line.add(new JButton("E"){{
+                setPreferredSize(new Dimension(30,30));
+                addActionListener(a -> {
+                    JFrame frame = new JFrame("");
+                    frame.setSize(200, 80);
+                    frame.setResizable(false);
+                    JPanel p = new JPanel();
+                    JTextField textField = new JTextField(){{
+                        setText(s);
+                    }};
+                    p.add(textField);
+                    p.add(new JButton("Save"){{
+                        addActionListener(a -> {
+                            for (int i = 0; i < autoExec.size(); i++) {
+                                if (autoExec.get(i).equals(s)) {
+                                    autoExec.set(i, textField.getText());
+                                    break;
+                                }
+                            }
+                            label.setText(textField.getText());
+                            frame.dispose();
+                        });
+                    }});
+                    frame.setContentPane(p);
+                    WindowUtils.center(frame);
+                    frame.setVisible(true);
+                });
+            }});
+            listPanel.add(line);
+            listPanel.revalidate();
         }
     }
 

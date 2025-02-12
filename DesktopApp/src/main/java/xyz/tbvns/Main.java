@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import lombok.SneakyThrows;
 import xyz.tbvns.Apps.AppElement;
 import xyz.tbvns.Apps.AppListManager;
+import xyz.tbvns.Apps.WindowUtils;
 import xyz.tbvns.UI.TextPrompt;
 
 import javax.imageio.ImageIO;
@@ -15,6 +16,10 @@ import java.awt.image.BufferedImage;
 public class Main {
     @SneakyThrows
     public static void main(String[] args) {
+        EZConfig.registerClassPath("xyz.tbvns.Configs");
+        EZConfig.load();
+        EZConfig.save();
+
         FlatDarculaLaf.setup();
         JFrame frame = new JFrame();
         frame.setTitle("Tbvns's app store");
@@ -22,6 +27,10 @@ public class Main {
         frame.setMaximumSize(new Dimension(300, 500));
         frame.setMinimumSize(new Dimension(300, 500));
         frame.setResizable(false);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        WindowUtils.center(frame);
+
+        frame.setIconImage(ImageIO.read(Main.class.getResource("/logo.png")));
 
         JPanel main = new JPanel();
         main.setBorder(new EmptyBorder(10, 10, 10, 10));

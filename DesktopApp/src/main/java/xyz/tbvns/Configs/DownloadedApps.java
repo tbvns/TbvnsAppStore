@@ -17,8 +17,19 @@ public class DownloadedApps implements Config {
     }
 
     public static void remove(InstalledApp app) {
-        List<InstalledApp> installed = new ArrayList<>(Arrays.asList(list));
-        installed.remove(app);
-        list = installed.toArray(new InstalledApp[0]);
+        if (app == null || app.getPath() == null) return;
+
+        final String targetPath = app.getPath();
+
+        // Check if path exists in the list
+        boolean exists = Arrays.stream(list)
+                .anyMatch(installedApp -> targetPath.equals(installedApp.getPath()));
+
+        if (exists) {
+            // Remove all entries with matching path (safer than equals())
+            list = Arrays.stream(list)
+                    .filter(installedApp -> !targetPath.equals(installedApp.getPath()))
+                    .toArray(InstalledApp[]::new);
+        }
     }
 }

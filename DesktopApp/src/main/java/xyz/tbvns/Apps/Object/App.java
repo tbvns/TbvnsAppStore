@@ -39,7 +39,7 @@ public class App {
     }
 
     public InstalledApp asInstalledApp() {
-        return new InstalledApp(id, path, name);
+        return new InstalledApp(id, path, name, this);
     }
 
     @SneakyThrows

@@ -22,13 +22,16 @@ public class ProcessChecker {
                     .map(OSProcess::getName)
                     .toList();
 
-            for (InstalledApp app : DownloadedApps.list) {
-                if (Utils.crossContains(app.getSettings().getAutoExecList(), processes) && !AppLauncher.isRunning(app)) {
-                    AppLauncher.launch(app);
-                } else if (!Utils.crossContains(app.getSettings().getAutoExecList(), processes) && AppLauncher.isRunning(app)) {
-                    AppLauncher.kill(app);
+            try {
+                for (InstalledApp app : DownloadedApps.list) {
+                    if (Utils.crossContains(app.getSettings().getAutoExecList(), processes) && !AppLauncher.isRunning(app)) {
+                        AppLauncher.launch(app);
+                    } else if (!Utils.crossContains(app.getSettings().getAutoExecList(), processes) && AppLauncher.isRunning(app)) {
+                        AppLauncher.kill(app);
+                    }
                 }
-            }
+            } catch (Exception e) {}
+            System.out.println(DownloadedApps.list.length);
             sleep(1000);
         }
     };

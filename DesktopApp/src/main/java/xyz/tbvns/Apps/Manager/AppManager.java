@@ -56,6 +56,7 @@ public class AppManager {
          if (app.isInstalled()) {
              FileUtils.deleteDirectory(app.getFolder());
              DownloadedApps.remove(app.asInstalledApp());
+             EZConfig.save();
              AppListManager.update(app);
          }
     }

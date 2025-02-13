@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,10 @@ public class AppListManager {
         }
         System.out.println(json);
         return appElementHashMap.values();
+    }
+
+    public static List<App> listApps() {
+        return appElementHashMap.keySet().stream().toList();
     }
 
     public static void update(App app) {

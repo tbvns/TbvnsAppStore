@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import xyz.tbvns.Apps.Object.App;
-import xyz.tbvns.Apps.Object.InstalledApp;
-import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.UI.AppElement;
 
 import java.io.InputStream;

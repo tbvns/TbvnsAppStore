@@ -5,7 +5,6 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import xyz.tbvns.Apps.Object.App;
-import xyz.tbvns.Apps.Object.InstalledApp;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Constant;
 import xyz.tbvns.EZConfig;
@@ -16,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 public class AppManager {
      @SneakyThrows

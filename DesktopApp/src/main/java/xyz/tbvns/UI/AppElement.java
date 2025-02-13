@@ -5,8 +5,8 @@ import xyz.tbvns.Api.GitRepoInfo;
 import xyz.tbvns.Api.Github;
 import xyz.tbvns.Apps.Launcher.AppLauncher;
 import xyz.tbvns.Apps.Manager.AppManager;
-import xyz.tbvns.Apps.Object.App;
 import xyz.tbvns.Apps.Manager.SettingsManager;
+import xyz.tbvns.Apps.Object.App;
 import xyz.tbvns.Constant;
 
 import javax.imageio.ImageIO;

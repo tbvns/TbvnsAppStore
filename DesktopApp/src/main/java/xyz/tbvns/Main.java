@@ -2,11 +2,11 @@ package xyz.tbvns;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import lombok.SneakyThrows;
-import xyz.tbvns.UI.AppElement;
-import xyz.tbvns.Apps.Manager.AppListManager;
 import xyz.tbvns.Apps.Launcher.ProcessChecker;
-import xyz.tbvns.UI.WindowUtils;
+import xyz.tbvns.Apps.Manager.AppListManager;
+import xyz.tbvns.UI.AppElement;
 import xyz.tbvns.UI.TextPrompt;
+import xyz.tbvns.UI.WindowUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

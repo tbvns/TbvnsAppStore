@@ -1,17 +1,14 @@
 package xyz.tbvns.Apps.Object;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import org.json.JSONPropertyIgnore;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Constant;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.util.List;

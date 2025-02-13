@@ -6,7 +6,6 @@ import xyz.tbvns.Apps.Object.InstalledApp;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static xyz.tbvns.Utils.sleep;

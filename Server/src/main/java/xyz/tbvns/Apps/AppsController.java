@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import xyz.tbvns.Configs.AppsConfig;
 import xyz.tbvns.Constant;
 
-import java.awt.*;
-import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;

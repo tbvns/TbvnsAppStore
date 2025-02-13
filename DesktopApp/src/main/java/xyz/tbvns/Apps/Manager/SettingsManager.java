@@ -60,6 +60,10 @@ public class SettingsManager {
             }});
             add(new JButton("Uninstall"){{
                 setBackground(Color.RED);
+                addActionListener(a -> {
+                    AppManager.uninstall(app);
+                    frame.dispose();
+                });
             }});
         }};
         frame.setContentPane(panel);

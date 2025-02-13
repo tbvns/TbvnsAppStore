@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import xyz.tbvns.Apps.Object.App;
+import xyz.tbvns.Apps.Object.InstalledApp;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Constant;
 import xyz.tbvns.EZConfig;
@@ -47,6 +48,15 @@ public class AppManager {
                  EZConfig.save();
                  break;
              }
+         }
+    }
+
+    @SneakyThrows
+    public static void uninstall(App app) {
+         if (app.isInstalled()) {
+             FileUtils.deleteDirectory(app.getFolder());
+             DownloadedApps.remove(app.asInstalledApp());
+             AppListManager.update(app);
          }
     }
 }

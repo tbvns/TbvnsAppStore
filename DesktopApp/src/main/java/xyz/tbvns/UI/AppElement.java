@@ -1,5 +1,6 @@
 package xyz.tbvns.UI;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import xyz.tbvns.Api.GitRepoInfo;
 import xyz.tbvns.Api.Github;
@@ -19,6 +20,9 @@ import java.net.URI;
 import java.net.URL;
 
 public class AppElement extends JPanel {
+    @Getter
+    private JButton dlButton;
+
     @SneakyThrows
     public AppElement(App app) {
         setBorder(new LineBorder(Color.DARK_GRAY, 1));
@@ -57,7 +61,7 @@ public class AppElement extends JPanel {
         setSize(280, 100);
     }
 
-    public static JPanel createNotInstalled(App app, GitRepoInfo info) {
+    public JPanel createNotInstalled(App app, GitRepoInfo info) {
         return new JPanel(){{
             add(new JButton("Install"){{
                 setAlignmentX(RIGHT_ALIGNMENT);
@@ -74,6 +78,7 @@ public class AppElement extends JPanel {
                         });
                     }).start();
                 });
+                dlButton = this;
             }});
             add(new JButton("Source"){{
                 setAlignmentX(RIGHT_ALIGNMENT);
@@ -91,13 +96,14 @@ public class AppElement extends JPanel {
         }};
     }
 
-    public static JPanel createInstalled(App app, GitRepoInfo info) {
+    public JPanel createInstalled(App app, GitRepoInfo info) {
         return new JPanel(){{
             add(new JButton("Settings"){{
                 setAlignmentX(RIGHT_ALIGNMENT);
                 addActionListener(a -> {
                     SettingsManager.showSettings(app);
                 });
+                dlButton = this;
             }});
             add(new JButton("Source"){{
                 setAlignmentX(RIGHT_ALIGNMENT);

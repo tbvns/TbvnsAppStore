@@ -7,6 +7,8 @@ import org.apache.commons.io.IOUtils;
 import xyz.tbvns.Apps.Object.App;
 import xyz.tbvns.UI.AppElement;
 
+import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
@@ -32,7 +34,26 @@ public class AppListManager {
         return appElementHashMap.values();
     }
 
-    public static List<App> listApp() {
-        return List.of((App[]) appElementHashMap.keySet().stream().toArray());
+    public static void update(App app) {
+        AppElement element = appElementHashMap.get(app);
+        JButton button = element.getDlButton();
+        button.setText("Install");
+        for (ActionListener listener : button.getActionListeners()) {
+            button.removeActionListener(listener);
+        }
+
+        button.addActionListener(a -> {
+            button.setText("Loading");
+            new Thread(() -> {
+                AppManager.install(app);
+                button.setText("Settings");
+                for (ActionListener listener : button.getActionListeners()) {
+                    button.removeActionListener(listener);
+                }
+                button.addActionListener(b -> {
+                    SettingsManager.showSettings(app);
+                });
+            }).start();
+        });
     }
 }

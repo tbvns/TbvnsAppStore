@@ -1,4 +1,4 @@
-package xyz.tbvns.Apps;
+package xyz.tbvns.Apps.Object;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,9 +1,12 @@
-package xyz.tbvns.Apps;
+package xyz.tbvns.Apps.Manager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
+import xyz.tbvns.Apps.Object.App;
+import xyz.tbvns.Apps.Object.AppSettings;
+import xyz.tbvns.UI.WindowUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -1,31 +1,34 @@
-package xyz.tbvns.Apps;
+package xyz.tbvns.Apps.Object;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import xyz.tbvns.Configs.DownloadedApps;
+import lombok.SneakyThrows;
 import xyz.tbvns.Constant;
 
 import java.io.File;
-import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class App {
+@Data
+public class InstalledApp {
     private int id;
-    private String name;
     private String path;
-    private String file;
-    private List<String> autoExec;
+    private String name;
 
-    public boolean isInstalled() {
-        return DownloadedApps.list.contains(path);
-    }
     public File getConfigFile() {
         return new File(Constant.appFolder + "/" + path + "/app.json");
     }
     public File getFolder() {
         return new File(Constant.appFolder + "/" + path);
+    }
+    public File getBin() {
+        return new File(Constant.appFolder + "/" + path + "/app.jar");
+    }
+
+    @SneakyThrows
+    public AppSettings getSettings() {
+        return new ObjectMapper().readValue(getConfigFile(), AppSettings.class);
     }
 }

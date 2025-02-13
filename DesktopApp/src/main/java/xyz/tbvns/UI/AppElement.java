@@ -1,19 +1,19 @@
-package xyz.tbvns.Apps;
+package xyz.tbvns.UI;
 
 import lombok.SneakyThrows;
-import org.apache.commons.io.IOUtils;
 import xyz.tbvns.Api.GitRepoInfo;
 import xyz.tbvns.Api.Github;
+import xyz.tbvns.Apps.Launcher.AppLauncher;
+import xyz.tbvns.Apps.Manager.AppManager;
+import xyz.tbvns.Apps.Object.App;
+import xyz.tbvns.Apps.Manager.SettingsManager;
 import xyz.tbvns.Constant;
-import xyz.tbvns.Main;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -48,6 +48,7 @@ public class AppElement extends JPanel {
             rightPanel = createNotInstalled(app, info);
         } else {
             rightPanel = createInstalled(app, info);
+            AppLauncher.launch(app.asInstalledApp());
         }
 
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));

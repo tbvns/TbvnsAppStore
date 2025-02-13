@@ -2,9 +2,10 @@ package xyz.tbvns;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import lombok.SneakyThrows;
-import xyz.tbvns.Apps.AppElement;
-import xyz.tbvns.Apps.AppListManager;
-import xyz.tbvns.Apps.WindowUtils;
+import xyz.tbvns.UI.AppElement;
+import xyz.tbvns.Apps.Manager.AppListManager;
+import xyz.tbvns.Apps.Launcher.ProcessChecker;
+import xyz.tbvns.UI.WindowUtils;
 import xyz.tbvns.UI.TextPrompt;
 
 import javax.imageio.ImageIO;
@@ -72,5 +73,7 @@ public class Main {
 
         frame.setContentPane(main);
         frame.setVisible(true);
+
+        ProcessChecker.start();
     }
 }

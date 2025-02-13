@@ -1,21 +1,22 @@
-package xyz.tbvns.Apps;
+package xyz.tbvns.Apps.Manager;
 
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import xyz.tbvns.Apps.Object.App;
+import xyz.tbvns.Apps.Object.InstalledApp;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Constant;
 import xyz.tbvns.EZConfig;
+import xyz.tbvns.Utils;
 
-import java.io.BufferedReader;
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class AppManager {
      @SneakyThrows
@@ -43,7 +44,8 @@ public class AppManager {
                  String downloadPath = object.getString("browser_download_url");
                  System.out.println(downloadPath);
                  FileUtils.copyToFile(new URL(downloadPath).openStream(), new File(appFolder.getPath() + "/app.jar"));
-                 DownloadedApps.list.add(app.getPath());
+                 ImageIO.write(Utils.convertToBufferedImage(app.grabImage()), "png", new File(app.getFolder() + "/logo.png"));
+                 DownloadedApps.add(app.asInstalledApp());
                  EZConfig.save();
                  break;
              }

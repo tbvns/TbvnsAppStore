@@ -1,4 +1,4 @@
-package xyz.tbvns.Apps;
+package xyz.tbvns.UI;
 
 import java.awt.*;
 

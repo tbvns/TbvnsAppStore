@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import xyz.tbvns.Api.GitRepoInfo;
 import xyz.tbvns.Api.Github;
 import xyz.tbvns.Apps.Launcher.AppLauncher;
+import xyz.tbvns.Apps.Manager.AppListManager;
 import xyz.tbvns.Apps.Manager.AppManager;
 import xyz.tbvns.Apps.Manager.SettingsManager;
 import xyz.tbvns.Apps.Object.App;
@@ -52,7 +53,6 @@ public class AppElement extends JPanel {
             rightPanel = createNotInstalled(app, info);
         } else {
             rightPanel = createInstalled(app, info);
-            AppLauncher.launch(app.asInstalledApp());
         }
 
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -68,7 +68,11 @@ public class AppElement extends JPanel {
                 addActionListener(a -> {
                     setText("Loading");
                     new Thread(() -> {
-                        AppManager.install(app);
+                        if (!AppManager.install(app)) {
+                            setText("Install");
+                            return;
+                        }
+
                         setText("Settings");
                         for (ActionListener listener : getActionListeners()) {
                             removeActionListener(listener);

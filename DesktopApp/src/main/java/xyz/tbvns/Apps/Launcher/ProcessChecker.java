@@ -31,7 +31,6 @@ public class ProcessChecker {
                     }
                 }
             } catch (Exception e) {}
-            System.out.println(DownloadedApps.list.length);
             sleep(1000);
         }
     };

@@ -20,7 +20,12 @@ public class Constant {
             javaBin += "w.exe";
 
         if (!new File(javaBin).exists()) {
-            System.err.println("ERROR: COULD NOT FIND BUNDLED JAVA. SWITCHING TO SYSTEM DEFAULT");
+            System.err.println("""
+                    WARNING: Bundled Java not found. Falling back to system default.
+                             Tbvns's app store may have been installed incorrectly.""");
+            ErrorHandler.warn("""
+                    Bundled Java runtime not found. Falling back to system default.
+                    This may be caused by an incorrect installation of Tbvns's App Store.""");
             javaBin = "java";
         }
     }

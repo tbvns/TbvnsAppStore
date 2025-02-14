@@ -1,6 +1,7 @@
 package xyz.tbvns;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import xyz.tbvns.Apps.Launcher.ProcessChecker;
 import xyz.tbvns.UI.WindowUtils;
 
@@ -14,6 +15,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 
+@Slf4j
 public class ErrorHandler {
     @SneakyThrows
     public static void handle(Exception e, boolean isFatal) {
@@ -23,19 +25,25 @@ public class ErrorHandler {
         }
 
         JFrame frame = new JFrame("Error: " + e.getMessage());
-        frame.setSize(800, 400);
+        frame.setSize(600, 400);
         JPanel panel = new JPanel();
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JLabel errorLabel = new JLabel("Error: " + e.getMessage()){{
-            setIcon(new ImageIcon(ImageIO.read(ErrorHandler.class.getResource("/Icons/error.png")).getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
+        JLabel errorLabel = new JLabel("Error: " + e.getMessage()) {{
+            setIcon(UIManager.getIcon("OptionPane.errorIcon"));
+            setBorder(new EmptyBorder(10, 5, 10, 10));
             setFont(getFont().deriveFont(20F));
             if (isFatal) {
                 setText("Fatal error: " + e.getMessage());
             }
+            setAlignmentX(Component.LEFT_ALIGNMENT);
         }};
-        panel.add(errorLabel);
+        labelPanel.add(errorLabel);
+        labelPanel.add(Box.createHorizontalGlue());
+        panel.add(labelPanel);
 
         JTextArea area = new JTextArea(){{
             setEditable(false);
@@ -44,9 +52,17 @@ public class ErrorHandler {
 //        Arrays.stream(e.getStackTrace()).map(el -> el.toString() + "\n").forEach(area::append);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         e.printStackTrace(new PrintStream(stream));
-        area.append(new String(stream.toByteArray()));
+        String trace = new String(stream.toByteArray());
+        area.append(trace);
+        log.error(trace);
 
-        panel.add(new JScrollPane(area){{setPreferredSize(new Dimension(300, 300));}});
+        panel.add(new JScrollPane(area){{
+            setPreferredSize(new Dimension(300, 300));
+            setBorder(new EmptyBorder(0, 0, 10, 0));
+        }});
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 
         JButton button = new JButton("Close") {{
             addActionListener(a -> {
@@ -57,18 +73,20 @@ public class ErrorHandler {
             });
 
             if (isFatal) {
-                setBackground(Color.RED);
+                setBackground(new Color(199, 84, 80));
                 setText("End program");
                 frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             }
-            setAlignmentX(0);
+            setAlignmentX(Component.RIGHT_ALIGNMENT);
         }};
 
-        panel.add(button);
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(button);
+
+        panel.add(buttonPanel);
         frame.setContentPane(panel);
         WindowUtils.center(frame);
         frame.setVisible(true);
-
 
         if (isFatal) {
             Thread.currentThread().join();
@@ -76,6 +94,7 @@ public class ErrorHandler {
     }
 
     public static void warn(String message) {
+        log.warn(message);
         new Thread(() -> {
             JOptionPane.showMessageDialog(new Frame(),
                     message,

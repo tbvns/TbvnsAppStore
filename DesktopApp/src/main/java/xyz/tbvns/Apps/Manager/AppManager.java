@@ -1,6 +1,7 @@
 package xyz.tbvns.Apps.Manager;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,8 +18,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Slf4j
 public class AppManager {
     public static boolean install(App app) {
+        log.info("Installing {}", app.getName());
         try {
             String apiUrl = String.format("https://api.github.com/repos/" + app.getPath() + "/releases/latest");
             HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
@@ -57,6 +60,7 @@ public class AppManager {
 
     @SneakyThrows
     public static void uninstall(App app) {
+        log.info("Uninstalling {}", app.getName());
          if (app.isInstalled()) {
              FileUtils.deleteDirectory(app.getFolder());
              DownloadedApps.remove(app.asInstalledApp());

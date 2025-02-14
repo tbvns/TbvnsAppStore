@@ -6,6 +6,7 @@ import xyz.tbvns.Apps.Object.InstalledApp;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Utils;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static xyz.tbvns.Utils.sleep;
@@ -23,7 +24,11 @@ public class ProcessChecker {
                     .toList();
 
             try {
-                for (InstalledApp app : DownloadedApps.list) {
+                for (InstalledApp app :
+                        Arrays.stream(DownloadedApps.list)
+                                .filter(app -> app.getSettings().isAutoExec())
+                                .toList())
+                {
                     if (Utils.crossContains(app.getSettings().getAutoExecList(), processes) && !AppLauncher.isRunning(app)) {
                         AppLauncher.launch(app);
                     } else if (!Utils.crossContains(app.getSettings().getAutoExecList(), processes) && AppLauncher.isRunning(app)) {

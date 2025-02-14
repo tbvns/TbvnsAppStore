@@ -80,7 +80,9 @@ public class AppElement extends JPanel {
                         addActionListener(b -> {
                             SettingsManager.showSettings(app);
                         });
-                    }).start();
+                    }){{
+                        setName(app.getName() + "-dlThread");
+                    }}.start();
                 });
                 dlButton = this;
             }});

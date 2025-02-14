@@ -3,6 +3,7 @@ package xyz.tbvns.Apps.Manager;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import xyz.tbvns.Apps.Object.App;
 import xyz.tbvns.ErrorHandler;
@@ -16,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
 public class AppListManager {
     private static final HashMap<App, AppElement> appElementHashMap = new HashMap<>();
 
@@ -32,7 +34,7 @@ public class AppListManager {
                 AppElement element = new AppElement(app);
                 appElementHashMap.put(app, element);
             }
-            System.out.println(json);
+            log.info("Retrieved {} app(s) from the server", appElementHashMap.keySet().size());
         } catch (Exception e) {
             ErrorHandler.handle(e, true);
         }
@@ -62,7 +64,9 @@ public class AppListManager {
                 button.addActionListener(b -> {
                     SettingsManager.showSettings(app);
                 });
-            }).start();
+            }){{
+                setName(app.getName() + "-dlThread");
+            }}.start();
         });
     }
 }

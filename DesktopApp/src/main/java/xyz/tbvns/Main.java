@@ -2,6 +2,7 @@ package xyz.tbvns;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import xyz.tbvns.Apps.Launcher.ProcessChecker;
 import xyz.tbvns.Apps.Manager.AppListManager;
 import xyz.tbvns.UI.AppElement;
@@ -14,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+@Slf4j
 public class Main {
     @SneakyThrows
     public static void main(String[] args) {
@@ -73,6 +75,9 @@ public class Main {
 
         frame.setContentPane(main);
         frame.setVisible(true);
+
+        log.info("Server address is {}", Constant.serverUrl);
+        log.info("Install folder is {}", Constant.mainFolder);
 
         ProcessChecker.start();
     }

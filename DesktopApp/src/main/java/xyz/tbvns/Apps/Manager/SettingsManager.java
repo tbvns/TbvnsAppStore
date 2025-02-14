@@ -27,13 +27,20 @@ public class SettingsManager {
         WindowUtils.center(frame);
         JPanel panel = new JPanel(){{
             setBorder(new EmptyBorder(10, 10, 10, 10));
-            add(new JCheckBox("Auto start"){{
-                setSelected(settings.get().isAutoExec());
-                addActionListener(a -> {
-                    settings.get().setAutoExec(!settings.get().isAutoExec());
-                });
-            }});
+            JPanel settingsPanel = new JPanel(){{
+                add(new JCheckBox("Auto start"){{
+                    setSelected(settings.get().isAutoExec());
+                    addActionListener(a -> {
+                        settings.get().setAutoExec(!settings.get().isAutoExec());
+                    });
+                    setAlignmentX(0);
+                }});
+                setPreferredSize(new Dimension(180, 30));
+            }};
+            settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.X_AXIS));
+            add(settingsPanel);
             add(new JButton("Auto start rules"){{
+                setPreferredSize(new Dimension(180, 30));
                 addActionListener(a -> {
                     JFrame f = showAutoStart(app);
                     frame.dispose();
@@ -44,6 +51,7 @@ public class SettingsManager {
                 });
             }});
             add(new JButton("Save"){{
+                setPreferredSize(new Dimension(180, 30));
                 addActionListener(a -> {
                     try {
                         FileUtils.writeStringToFile(
@@ -59,15 +67,16 @@ public class SettingsManager {
                 });
             }});
             add(new JButton("Uninstall"){{
-                setBackground(Color.RED);
+                setPreferredSize(new Dimension(180, 30));
+                setBackground(new Color(199, 84, 80));
                 addActionListener(a -> {
                     AppManager.uninstall(app);
                     frame.dispose();
                 });
             }});
         }};
+        panel.setLayout(new FlowLayout());
         frame.setContentPane(panel);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         frame.setVisible(true);
     }

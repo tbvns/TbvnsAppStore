@@ -1,6 +1,7 @@
 package xyz.tbvns.Apps.Launcher;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import xyz.tbvns.Apps.Object.InstalledApp;
 import xyz.tbvns.Constant;
 
@@ -10,13 +11,14 @@ import java.util.List;
 
 import static xyz.tbvns.Utils.sleep;
 
+@Slf4j
 public class AppLauncher {
     private static List<InstalledApp> running = new ArrayList<>();
     private static HashMap<InstalledApp, Process> hashMap = new HashMap<>();
 
     @SneakyThrows
     public static void launch(InstalledApp app) {
-        System.out.println("Launching " + app.getName());
+        log.info("Launching {}", app.getName());
         Process process = Runtime.getRuntime().exec(new String[]{Constant.javaBin, "-jar", app.getBin().getPath(), "appStore"});
         running.add(app);
         hashMap.put(app, process);

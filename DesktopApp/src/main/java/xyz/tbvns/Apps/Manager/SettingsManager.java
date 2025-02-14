@@ -23,7 +23,9 @@ public class SettingsManager {
     public static void showSettings(App app) {
         AtomicReference<AppSettings> settings = new AtomicReference<>(getSettings(app));
         JFrame frame = new JFrame(app.getName() + " Settings");
-        frame.setSize(200, 200);
+        WindowUtils.setIcon(frame, WindowUtils.Icons.normal);
+        frame.setSize(220, 200);
+        frame.setResizable(false);
         WindowUtils.center(frame);
         JPanel panel = new JPanel(){{
             setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -41,6 +43,7 @@ public class SettingsManager {
                 setPreferredSize(new Dimension(180, 30));
                 addActionListener(a -> {
                     JFrame f = showAutoStart(app);
+                    WindowUtils.setIcon(f, WindowUtils.Icons.normal);
                     frame.dispose();
                     new Thread(() -> {
                         while (f.isVisible() && f.isShowing()) sleep(100);
@@ -83,6 +86,7 @@ public class SettingsManager {
     public static JFrame showAutoStart(App app) {
         AppSettings settings = getSettings(app);
         AtomicReference<JFrame> frame = new AtomicReference<>(new JFrame(app.getName() + " auto start settings"));
+        WindowUtils.setIcon(frame.get(), WindowUtils.Icons.normal);
         frame.get().setSize(250, 280);
         frame.get().setResizable(false);
 

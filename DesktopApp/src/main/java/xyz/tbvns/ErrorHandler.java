@@ -26,6 +26,7 @@ public class ErrorHandler {
 
         JFrame frame = new JFrame("Error: " + e.getMessage());
         frame.setSize(600, 400);
+        WindowUtils.setIcon(frame, WindowUtils.Icons.error);
         JPanel panel = new JPanel();
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -95,8 +96,10 @@ public class ErrorHandler {
 
     public static void warn(String message) {
         log.warn(message);
+        JFrame frame = new JFrame("Waning");
+        WindowUtils.setIcon(frame, WindowUtils.Icons.warn);
         new Thread(() -> {
-            JOptionPane.showMessageDialog(new Frame(),
+            JOptionPane.showMessageDialog(frame,
                     message,
                     "Warning",
                     JOptionPane.WARNING_MESSAGE);

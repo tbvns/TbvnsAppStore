@@ -45,7 +45,8 @@ public class AppElement extends JPanel {
         GitRepoInfo info = Github.getInfo(app.getPath());
 
         JPanel infoPanel = new JPanel();
-        JLabel infoLabel = new JLabel("<html><b>" + app.getName() + "</b><br><div style='width: 100px; word-wrap: break-word; white-space: normal;'>" + info.getDesc() + "</div></html>");        infoPanel.add(infoLabel);
+        JLabel infoLabel = new JLabel("<html><b>" + app.getName() + "</b><br><div style='width: 100px; word-wrap: break-word; white-space: normal;'>" + info.getDesc() + "</div></html>");
+        infoPanel.add(infoLabel);
         add(infoPanel);
 
         JPanel rightPanel;

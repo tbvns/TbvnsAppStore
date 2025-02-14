@@ -30,9 +30,7 @@ public class SettingsManager {
             JPanel settingsPanel = new JPanel(){{
                 add(new JCheckBox("Auto start"){{
                     setSelected(settings.get().isAutoExec());
-                    addActionListener(a -> {
-                        settings.get().setAutoExec(!settings.get().isAutoExec());
-                    });
+                    addActionListener(a -> settings.get().setAutoExec(!settings.get().isAutoExec()));
                     setAlignmentX(0);
                 }});
                 setPreferredSize(new Dimension(180, 30));
@@ -63,7 +61,7 @@ public class SettingsManager {
                                 false
                         );
                         frame.dispose();
-                    } catch (Exception e){}
+                    } catch (Exception ignored){}
                 });
             }});
             add(new JButton("Uninstall"){{
@@ -126,7 +124,7 @@ public class SettingsManager {
                                 Charset.defaultCharset(),
                                 false
                         );
-                    } catch (Exception e){}
+                    } catch (Exception ignored){}
                     frame.get().dispose();
                 });
             }});
@@ -140,10 +138,10 @@ public class SettingsManager {
     }
 
     private static class autoExecList extends JScrollPane {
-        private JPanel listPanel;
+        private final JPanel listPanel;
 
         @Getter
-        private List<String> autoExec;
+        private final List<String> autoExec;
         public autoExecList(List<String> autoExec) {
             JPanel panel = new JPanel();
             listPanel = panel;

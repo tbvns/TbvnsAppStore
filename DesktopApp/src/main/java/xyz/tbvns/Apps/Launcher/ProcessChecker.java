@@ -13,7 +13,7 @@ import static xyz.tbvns.Utils.sleep;
 
 public class ProcessChecker {
     private static boolean check;
-    private static Runnable checker = () -> {
+    private static final Runnable checker = () -> {
         while (check) {
             SystemInfo info = new SystemInfo();
             List<String> processes = info
@@ -35,7 +35,7 @@ public class ProcessChecker {
                         AppLauncher.kill(app);
                     }
                 }
-            } catch (Exception e) {}
+            } catch (Exception ignored) {}
             sleep(1000);
         }
     };

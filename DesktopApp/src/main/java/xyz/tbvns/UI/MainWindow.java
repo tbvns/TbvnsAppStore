@@ -3,12 +3,9 @@ package xyz.tbvns.UI;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import xyz.tbvns.*;
 import xyz.tbvns.Apps.Launcher.ProcessChecker;
 import xyz.tbvns.Apps.Manager.AppListManager;
-import xyz.tbvns.Constant;
-import xyz.tbvns.EZConfig;
-import xyz.tbvns.ErrorHandler;
-import xyz.tbvns.Main;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -22,13 +19,16 @@ import static xyz.tbvns.UI.WindowUtils.icon;
 
 @Slf4j
 public class MainWindow {
+    public static boolean isShown = false;
+
     @SneakyThrows
     public static void show() {
+        if (isShown) return;
+        isShown = true;
         EZConfig.registerClassPath("xyz.tbvns.Configs");
         EZConfig.load();
         EZConfig.save();
 
-        FlatDarculaLaf.setup();
         JFrame frame = new JFrame();
         frame.setTitle("Tbvns's app store");
         frame.setSize(350, 500);
@@ -108,9 +108,13 @@ public class MainWindow {
         frame.setContentPane(main);
         frame.setVisible(true);
 
-        log.info("Server address is {}", Constant.serverUrl);
-        log.info("Install folder is {}", Constant.mainFolder);
-
-        ProcessChecker.start();
+        new Thread(() -> {
+            while (frame.isShowing()) Utils.sleep(100);
+            isShown = false;
+        }) {{
+            setName("WindowCheckThread");
+            setDaemon(true);
+            start();
+        }};
     }
 }

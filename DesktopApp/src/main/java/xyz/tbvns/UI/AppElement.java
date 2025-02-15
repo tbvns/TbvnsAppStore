@@ -23,9 +23,12 @@ import java.net.URL;
 public class AppElement extends JPanel {
     @Getter
     private JButton dlButton;
+    @Getter
+    private App app;
 
     @SneakyThrows
     public AppElement(App app) {
+        this.app = app;
         setBorder(new LineBorder(Color.DARK_GRAY, 1));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         Image logo = ImageIO.read(AppElement.class.getResourceAsStream("/Icons/broken.png")).getScaledInstance(100, 100, Image.SCALE_SMOOTH);

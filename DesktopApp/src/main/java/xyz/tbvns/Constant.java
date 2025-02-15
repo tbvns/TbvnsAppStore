@@ -20,12 +20,5 @@ public class Constant {
         javaBin = mainFolder + "/bin/java/bin/java";
         if (new SystemInfo().getOperatingSystem().getFamily().toLowerCase().contains("win"))
             javaBin += "w.exe";
-
-        if (!new File(javaBin).exists()) {
-            ErrorHandler.warn("""
-                    Bundled Java runtime not found. Falling back to system default.
-                    This may be caused by an incorrect installation of Tbvns's App Store.""");
-            javaBin = "java";
-        }
     }
 }

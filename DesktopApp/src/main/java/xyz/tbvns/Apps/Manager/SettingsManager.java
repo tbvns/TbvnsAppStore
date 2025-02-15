@@ -97,8 +97,9 @@ public class SettingsManager {
             add(list);
             add(new JButton("Add"){{
                 addActionListener(l -> {
-                    JFrame f = new JFrame("");
-                    f.setSize(200, 80);
+                    JFrame f = new JFrame("Add auto start rule");
+                    WindowUtils.setIcon(f, WindowUtils.Icons.normal);
+                    f.setSize(250, 80);
                     f.setResizable(false);
                     JPanel p = new JPanel();
                     JTextField textField = new JTextField();
@@ -183,8 +184,9 @@ public class SettingsManager {
             line.add(new JButton("E"){{
                 setPreferredSize(new Dimension(30,30));
                 addActionListener(a -> {
-                    JFrame frame = new JFrame("");
-                    frame.setSize(200, 80);
+                    JFrame frame = new JFrame("Edit auto start rule");
+                    WindowUtils.setIcon(frame, WindowUtils.Icons.normal);
+                    frame.setSize(250, 80);
                     frame.setResizable(false);
                     JPanel p = new JPanel();
                     JTextField textField = new JTextField(){{

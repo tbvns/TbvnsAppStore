@@ -26,6 +26,7 @@ public class Communicator implements Runnable {
             ExcerptAppender appender = queue.createAppender();
             appender.writeDocument(w -> w.write("flag").text("true"));
             System.out.println("Sender: Flag sent.");
+            appender.close();
         }
     }
 
@@ -49,6 +50,8 @@ public class Communicator implements Runnable {
                     Thread.sleep(50);
                 }
             }
+
+            tailer.close();
         } catch (InterruptedException e) {
             System.out.println("Receiver thread interrupted, exiting.");
             Thread.currentThread().interrupt();
@@ -57,17 +60,7 @@ public class Communicator implements Runnable {
 
     public void start() {
         new Thread(this).start();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            log.info("Deleting queue...");
-            File file = new File(queuePath);
-            if (file.exists()) {
-                try {
-                    FileUtils.deleteDirectory(file);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }){{
+        Runtime.getRuntime().addShutdownHook(new Thread(this::clearQueue){{
             setName("ShutdownHook");
         }});
     }
@@ -75,6 +68,25 @@ public class Communicator implements Runnable {
     // Stop the receiver gracefully
     public void stop() {
         running = false;
+    }
+
+    public void clearQueue() {
+        log.info("Deleting queue...");
+        stop();
+        Utils.sleep(200);
+        File file = new File(queuePath);
+        if (file.exists()) {
+            try {
+                FileUtils.deleteDirectory(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void clearRestart() {
+        clearQueue();
+        start();
     }
 }
 

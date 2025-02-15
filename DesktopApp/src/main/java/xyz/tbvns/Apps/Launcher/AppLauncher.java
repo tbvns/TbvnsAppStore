@@ -16,6 +16,15 @@ public class AppLauncher {
     private static List<InstalledApp> running = new ArrayList<>();
     private static HashMap<InstalledApp, Process> hashMap = new HashMap<>();
 
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            log.info("Killing every processes...");
+            hashMap.forEach((k, v) -> {
+                v.destroy();
+            });
+        }, "ShutdownJook-Launcher"));
+    }
+
     @SneakyThrows
     public static void launch(InstalledApp app) {
         log.info("Launching {}", app.getName());

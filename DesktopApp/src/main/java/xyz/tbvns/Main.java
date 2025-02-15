@@ -7,10 +7,14 @@ import oshi.SystemInfo;
 import oshi.software.os.OSProcess;
 import xyz.tbvns.Apps.Launcher.ProcessChecker;
 import xyz.tbvns.UI.MainWindow;
+import xyz.tbvns.UI.Tray;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.lang.management.ManagementFactory;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -20,36 +24,42 @@ public class Main {
     @SneakyThrows
     public static void main(String[] args) {
         FlatDarculaLaf.setup();
+
         Communicator communicator = new Communicator(Constant.mainFolder + "/queue");
+        communicator.sendFlag();
 
         if (isAlreadyRunning()) {
-            communicator.sendFlag();
             Runtime.getRuntime().exit(0);
             return;
         }
         if (!(args.length >= 1 && args[0].equals("autostart"))) MainWindow.show();
 
-        communicator.start();
+        communicator.clearRestart();
         ProcessChecker.start();
+        Tray.setUp();
 
         log.info("Server address is {}", Constant.serverUrl);
         log.info("Install folder is {}", Constant.mainFolder);
-
-
     }
 
     public static boolean isAlreadyRunning() {
         List<OSProcess> lsp = new SystemInfo().getOperatingSystem().getProcesses();
+        String cmd = new SystemInfo().getOperatingSystem().getCurrentProcess().getCommandLine();
         int count = 0;
         for (OSProcess osProcess : lsp) {
-            if (osProcess.getCommandLine().equals(new SystemInfo().getOperatingSystem().getCurrentProcess().getCommandLine())) {
+            if (osProcess.getCommandLine().equals(cmd) || osProcess.getCommandLine().equals(cmd + " autostart")) {
                 count++;
+                System.out.println(count);
+                if (count >= 2) {
+                    break;
+                }
             }
         }
         if (count > 1) {
             System.out.println("Already running !");
             return true;
         }
+        System.out.println("Not already running");
         return false;
     }
 

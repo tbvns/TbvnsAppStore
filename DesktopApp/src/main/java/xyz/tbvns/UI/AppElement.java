@@ -9,6 +9,7 @@ import xyz.tbvns.Apps.Manager.AppListManager;
 import xyz.tbvns.Apps.Manager.AppManager;
 import xyz.tbvns.Apps.Manager.SettingsManager;
 import xyz.tbvns.Apps.Object.App;
+import xyz.tbvns.Apps.Object.InstalledApp;
 import xyz.tbvns.Constant;
 
 import javax.imageio.ImageIO;
@@ -25,10 +26,13 @@ public class AppElement extends JPanel {
     private JButton dlButton;
     @Getter
     private App app;
+    @Getter
+    private boolean offline;
 
     @SneakyThrows
     public AppElement(App app) {
         this.app = app;
+        offline = false;
         setBorder(new LineBorder(Color.DARK_GRAY, 1));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         Image logo = ImageIO.read(AppElement.class.getResourceAsStream("/Icons/broken.png")).getScaledInstance(100, 100, Image.SCALE_SMOOTH);
@@ -59,6 +63,39 @@ public class AppElement extends JPanel {
             rightPanel = createInstalled(app, info);
         }
 
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        add(rightPanel);
+
+        setSize(280, 100);
+    }
+
+    @SneakyThrows
+    public AppElement(InstalledApp app) {
+        this.app = app.app;
+        offline = true;
+        setBorder(new LineBorder(Color.DARK_GRAY, 1));
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        Image logo = ImageIO.read(AppElement.class.getResourceAsStream("/Icons/broken.png")).getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+
+        URL url = new URL("file://" + app.getFolder().getPath() + "/logo.png");
+        try {
+            logo = ImageIO.read(url).getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        JLabel image = new JLabel();
+        image.setSize(20, 20);
+        image.setIcon(new ImageIcon(logo));
+        add(image);
+
+        GitRepoInfo info = Github.getInfo(app.getPath());
+
+        JPanel infoPanel = new JPanel();
+        JLabel infoLabel = new JLabel("<html><b>" + app.getName() + "</b><br><div style='width: 100px; word-wrap: break-word; white-space: normal;'>" + info.getDesc() + "</div></html>");
+        infoPanel.add(infoLabel);
+        add(infoPanel);
+        JPanel rightPanel = createInstallNoConnection(app);
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         add(rightPanel);
 
@@ -127,6 +164,31 @@ public class AppElement extends JPanel {
             }});
             add(new JLabel("<html><b>" + 404 + "</b> Download</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
             add(new JLabel("<html><b>"+ info.getStars() +"</b> Stars</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
+            setAlignmentX(RIGHT_ALIGNMENT);
+        }};
+    }
+
+    public JPanel createInstallNoConnection(InstalledApp app) {
+        return new JPanel(){{
+            add(new JButton("Settings"){{
+                setAlignmentX(RIGHT_ALIGNMENT);
+                addActionListener(a -> {
+                    SettingsManager.showSettings(app.app);
+                });
+                dlButton = this;
+            }});
+            add(new JButton("Source"){{
+                setAlignmentX(RIGHT_ALIGNMENT);
+                addActionListener(a -> {
+                    try {
+                        Desktop.getDesktop().browse(URI.create("https://github.com/" + app.getPath()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }});
+//            add(new JLabel("<html><b>?</b> Download</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
+//            add(new JLabel("<html><b>?</b> Stars</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
             setAlignmentX(RIGHT_ALIGNMENT);
         }};
     }

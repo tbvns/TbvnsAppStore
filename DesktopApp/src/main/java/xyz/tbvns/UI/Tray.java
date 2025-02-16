@@ -10,6 +10,10 @@ import java.awt.event.MouseEvent;
 public class Tray {
     @SneakyThrows
     public static void setUp() {
+        if (!SystemTray.isSupported()) {
+            return;
+        }
+
         TrayIcon icon = new TrayIcon(ImageIO.read(Tray.class.getResource("/Logos/logo.png")).getScaledInstance(16, 16, Image.SCALE_SMOOTH)) {{
             setPopupMenu(new PopupMenu("Tbvns's app store"){{
                 add(new MenuItem("Show"){{

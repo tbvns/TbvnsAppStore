@@ -6,6 +6,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import xyz.tbvns.Apps.Object.App;
+import xyz.tbvns.Apps.Object.InstalledApp;
+import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.ErrorHandler;
 import xyz.tbvns.UI.AppElement;
 
@@ -13,40 +15,50 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
 public class AppListManager {
-    private static final HashMap<App, AppElement> appElementHashMap = new HashMap<>();
+    private static final HashMap<String, AppElement> appElementHashMap = new HashMap<>();
+    private static List<App> apps = new ArrayList<>();
 
     //TODO: implement caching
     @SneakyThrows
     public static Collection<AppElement> retrieveApps() {
-        //TODO: add caching to not crash if the server is unavailable
         try {
             InputStream in = new URL("http://localhost:8080/apps/list").openStream();
             String json = IOUtils.toString(in);
             ObjectMapper mapper = new ObjectMapper();
-            List<App> apps = mapper.readValue(json, new TypeReference<List<App>>() {});
+            apps = mapper.readValue(json, new TypeReference<List<App>>() {});
             for (App app : apps) {
                 AppElement element = new AppElement(app);
-                appElementHashMap.put(app, element);
+                appElementHashMap.put(app.getPath(), element);
             }
             log.info("Retrieved {} app(s) from the server", appElementHashMap.keySet().size());
         } catch (Exception e) {
-            ErrorHandler.handle(e, true);
+            ErrorHandler.handle(e, false);
         }
+
+        for (InstalledApp app : DownloadedApps.list) {
+            if (!apps.stream().map(App::getPath).toList().contains(app.getPath())) {
+                AppElement element = new AppElement(app);
+                appElementHashMap.put(app.getPath(), element);
+                apps.add(app.app);
+            }
+        }
+
         return appElementHashMap.values();
     }
 
     public static List<App> listApps() {
-        return appElementHashMap.keySet().stream().toList();
+        return apps;
     }
 
     public static void markUninstalled(App app) {
-        AppElement element = appElementHashMap.get(app);
+        AppElement element = appElementHashMap.get(app.getPath());
         JButton button = element.getDlButton();
         button.setText("Install");
         for (ActionListener listener : button.getActionListeners()) {

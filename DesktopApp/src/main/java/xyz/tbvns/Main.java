@@ -19,8 +19,6 @@ import java.util.List;
 
 @Slf4j
 public class Main {
-
-
     @SneakyThrows
     public static void main(String[] args) {
         FlatDarculaLaf.setup();

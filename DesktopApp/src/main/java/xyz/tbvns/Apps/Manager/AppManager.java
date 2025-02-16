@@ -45,7 +45,13 @@ public class AppManager {
                 if (object.getString("name").equals(app.getFile())) {
                     String downloadPath = object.getString("browser_download_url");
                     FileUtils.copyToFile(new URL(downloadPath).openStream(), new File(appFolder.getPath() + "/app.jar"));
-                    ImageIO.write(Utils.convertToBufferedImage(app.grabImage()), "png", new File(app.getFolder() + "/logo.png"));
+
+                    try {
+                        ImageIO.write(Utils.convertToBufferedImage(app.grabImage()), "png", new File(app.getFolder() + "/logo.png"));
+                    } catch (Exception e) {
+                        ErrorHandler.warn("Could not download icon: " + e.getMessage());
+                    }
+
                     DownloadedApps.add(app.asInstalledApp());
                     EZConfig.save();
                     break;

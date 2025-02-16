@@ -22,7 +22,7 @@ import java.util.List;
 
 @Slf4j
 public class AppListManager {
-    private static final HashMap<String, AppElement> appElementHashMap = new HashMap<>();
+    public static final HashMap<String, AppElement> appElementHashMap = new HashMap<>();
     private static List<App> apps = new ArrayList<>();
 
     //TODO: implement caching

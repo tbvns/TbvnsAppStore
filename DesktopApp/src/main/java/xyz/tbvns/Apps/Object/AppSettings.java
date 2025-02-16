@@ -16,7 +16,7 @@ public class AppSettings {
 
     public AppSettings(App app) {
         this.path = app.getPath();
-        autoExec = !app.getAutoExec().isEmpty();
-        autoExecList = app.getAutoExec();
+        autoExec = app.getAutoExec().length != 0;
+        autoExecList = List.of(app.getAutoExec());
     }
 }

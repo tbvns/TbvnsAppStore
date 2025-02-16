@@ -3,6 +3,10 @@ package xyz.tbvns.Apps.Manager;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import xyz.tbvns.Apps.Object.App;
@@ -17,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 @Slf4j
 public class AppManager {
@@ -50,6 +55,20 @@ public class AppManager {
                         ImageIO.write(Utils.convertToBufferedImage(app.grabImage()), "png", new File(app.getFolder() + "/logo.png"));
                     } catch (Exception e) {
                         ErrorHandler.warn("Could not download icon: " + e.getMessage());
+                    }
+
+                    //TODO: rate limiter currently filters for every id and not per id
+                    URL url = new URL(Constant.serverUrl + "/apps/download?id=" + app.getId());
+                    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                        HttpPost httpPost = new HttpPost(String.valueOf(url));
+                        httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+                        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+                            int statusCode = response.getCode();
+                            System.out.println("Response Code: " + statusCode);
+                            if (statusCode != 200) log.warn("Error while sending download: status code {}", statusCode);
+                        }
+                    } catch (Exception e) {
+                        ErrorHandler.handle(e, false);
                     }
 
                     DownloadedApps.add(app.asInstalledApp());

@@ -1,10 +1,12 @@
 package xyz.tbvns;
 
 import lombok.SneakyThrows;
+import xyz.tbvns.Apps.Object.App;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
+import java.util.*;
+import java.util.List;
 
 public class Utils {
     @SneakyThrows
@@ -50,5 +52,36 @@ public class Utils {
             }
         }
         return value;
+    }
+    
+    public enum appSortType {
+        download, stars, AZ, ZA
+    }
+    
+    public static List<App> sort(List<App> apps, appSortType type) {
+        switch (type) {
+            case download -> {
+                return apps.stream()
+                        .sorted(Comparator.comparing(App::getDownload))
+                        .toList();
+            }
+            case stars -> {
+                return apps.stream()
+                        .sorted(Comparator.comparingInt(App::getStars))
+                        .toList();
+            }
+            case AZ -> {
+                return apps.stream()
+                        .sorted(Comparator.comparing(App::getName))
+                        .toList();
+            }
+            default -> {
+                List<App> l = apps.stream()
+                        .sorted(Comparator.comparing(App::getName))
+                        .toList();
+                Collections.reverse(l);
+                return l;
+            }
+        }
     }
 }

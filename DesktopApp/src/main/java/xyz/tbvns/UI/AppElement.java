@@ -32,6 +32,7 @@ public class AppElement extends JPanel {
     @SneakyThrows
     public AppElement(App app) {
         this.app = app;
+        app.retrievePublicInfo();
         offline = false;
         setBorder(new LineBorder(Color.DARK_GRAY, 1));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -49,18 +50,16 @@ public class AppElement extends JPanel {
         image.setIcon(new ImageIcon(logo));
         add(image);
 
-        GitRepoInfo info = Github.getInfo(app.getPath());
-
         JPanel infoPanel = new JPanel();
-        JLabel infoLabel = new JLabel("<html><b>" + app.getName() + "</b><br><div style='width: 100px; word-wrap: break-word; white-space: normal;'>" + info.getDesc() + "</div></html>");
+        JLabel infoLabel = new JLabel("<html><b>" + app.getName() + "</b><br><div style='width: 100px; word-wrap: break-word; white-space: normal;'>" + app.getDesc() + "</div></html>");
         infoPanel.add(infoLabel);
         add(infoPanel);
 
         JPanel rightPanel;
         if (!app.isInstalled()) {
-            rightPanel = createNotInstalled(app, info);
+            rightPanel = createNotInstalled(app);
         } else {
-            rightPanel = createInstalled(app, info);
+            rightPanel = createInstalled(app);
         }
 
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -89,10 +88,8 @@ public class AppElement extends JPanel {
         image.setIcon(new ImageIcon(logo));
         add(image);
 
-        GitRepoInfo info = Github.getInfo(app.getPath());
-
         JPanel infoPanel = new JPanel();
-        JLabel infoLabel = new JLabel("<html><b>" + app.getName() + "</b><br><div style='width: 100px; word-wrap: break-word; white-space: normal;'>" + info.getDesc() + "</div></html>");
+        JLabel infoLabel = new JLabel("<html><b>" + app.getName() + "</b><br><div style='width: 100px; word-wrap: break-word; white-space: normal;'>" + app.getDesc() + "</div></html>");
         infoPanel.add(infoLabel);
         add(infoPanel);
         JPanel rightPanel = createInstallNoConnection(app);
@@ -102,7 +99,7 @@ public class AppElement extends JPanel {
         setSize(280, 100);
     }
 
-    public JPanel createNotInstalled(App app, GitRepoInfo info) {
+    public JPanel createNotInstalled(App app) {
         return new JPanel(){{
             add(new JButton("Install"){{
                 setAlignmentX(RIGHT_ALIGNMENT);
@@ -137,13 +134,13 @@ public class AppElement extends JPanel {
                     }
                 });
             }});
-            add(new JLabel("<html><b>" + 404 + "</b> Download</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
-            add(new JLabel("<html><b>"+ info.getStars() +"</b> Stars</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
+            add(new JLabel("<html><b>" + app.getDownload() + "</b> Download</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
+            add(new JLabel("<html><b>"+ app.getStars() +"</b> Stars</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
             setAlignmentX(RIGHT_ALIGNMENT);
         }};
     }
 
-    public JPanel createInstalled(App app, GitRepoInfo info) {
+    public JPanel createInstalled(App app) {
         return new JPanel(){{
             add(new JButton("Settings"){{
                 setAlignmentX(RIGHT_ALIGNMENT);
@@ -162,8 +159,8 @@ public class AppElement extends JPanel {
                     }
                 });
             }});
-            add(new JLabel("<html><b>" + 404 + "</b> Download</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
-            add(new JLabel("<html><b>"+ info.getStars() +"</b> Stars</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
+            add(new JLabel("<html><b>" + app.getDownload() + "</b> Download</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
+            add(new JLabel("<html><b>"+ app.getStars() +"</b> Stars</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
             setAlignmentX(RIGHT_ALIGNMENT);
         }};
     }

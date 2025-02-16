@@ -1,12 +1,16 @@
 package xyz.tbvns.Apps.Object;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import xyz.tbvns.Api.GitRepoInfo;
+import xyz.tbvns.Api.Github;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Constant;
 
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
@@ -21,7 +25,13 @@ public class App {
     private String name;
     private String path;
     private String file;
-    private List<String> autoExec;
+    private int download;
+    private String[] autoExec = new String[]{};
+
+    @JsonIgnore
+    private int stars;
+    @JsonIgnore
+    private String desc;
 
     public boolean isInstalled() {
         for (InstalledApp installedApp : DownloadedApps.list) {
@@ -39,11 +49,17 @@ public class App {
     }
 
     public InstalledApp asInstalledApp() {
-        return new InstalledApp(id, path, name, this);
+        return new InstalledApp(id, path, name, desc, this);
     }
 
     @SneakyThrows
     public Image grabImage() {
         return ImageIO.read(new URL(Constant.serverUrl + "/apps/logo?id=" + id)).getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+    }
+
+    public void retrievePublicInfo() {
+        GitRepoInfo info = Github.getInfo(path);
+        stars = info.getStars();
+        desc = info.getDesc();
     }
 }

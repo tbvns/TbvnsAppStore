@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import xyz.tbvns.*;
 import xyz.tbvns.Apps.Launcher.ProcessChecker;
 import xyz.tbvns.Apps.Manager.AppListManager;
+import xyz.tbvns.Apps.Object.App;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,7 +21,7 @@ import static xyz.tbvns.UI.WindowUtils.icon;
 @Slf4j
 public class MainWindow {
     public static boolean isShown = false;
-
+    public static JPanel appPanel;
     @SneakyThrows
     public static void show() {
         if (isShown) return;
@@ -54,7 +55,32 @@ public class MainWindow {
 
         JPanel filterPanel = new JPanel(){{
             add(new JLabel("Order:"));
-            add(new JComboBox<>(new String[]{"Download", "Stars", "A-Z", "Z-A"}));
+            add(new JComboBox<>(new String[]{"Download", "Stars", "A-Z", "Z-A"}){{
+                addActionListener(a -> {
+                    switch (getSelectedIndex()) {
+                        case 0 -> {
+                            for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.download)) {
+                                appPanel.add(AppListManager.appElementHashMap.get(app));
+                            }
+                        }
+                        case 1 -> {
+                            for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.stars)) {
+                                appPanel.add(AppListManager.appElementHashMap.get(app));
+                            }
+                        }
+                        case 3 -> {
+                            for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.ZA)) {
+                                appPanel.add(AppListManager.appElementHashMap.get(app));
+                            }
+                        }
+                        default -> {
+                            for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.AZ)) {
+                                appPanel.add(AppListManager.appElementHashMap.get(app));
+                            }
+                        }
+                    }
+                });
+            }});
             add(new JSeparator(SwingConstants.VERTICAL));
             add(new JLabel(" Filters:"));
             add(new JButton("Select"));
@@ -95,7 +121,7 @@ public class MainWindow {
         }});
         frame.setJMenuBar(menuBar);
 
-        JPanel appPanel = new JPanel();
+        appPanel = new JPanel();
         appPanel.setLayout(new BoxLayout(appPanel, BoxLayout.Y_AXIS));
         JScrollPane appPane = new JScrollPane(appPanel);
 

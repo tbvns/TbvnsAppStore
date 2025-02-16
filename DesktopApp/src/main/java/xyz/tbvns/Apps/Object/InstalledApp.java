@@ -12,6 +12,7 @@ import xyz.tbvns.Constant;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class InstalledApp {
     private int id;
     private String path;
     private String name;
+    private String desc;
     public App app;
 
     public File getConfigFile() {
@@ -57,8 +59,8 @@ public class InstalledApp {
                     .writeValue(getConfigFile(),
                             new AppSettings(
                                     app.getPath(),
-                                    app.getAutoExec() != null && !app.getAutoExec().isEmpty(),
-                                    app.getAutoExec()
+                                    app.getAutoExec() != null && app.getAutoExec().length != 0,
+                                    List.of(app.getAutoExec())
                             ));
         }
     }

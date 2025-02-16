@@ -14,5 +14,6 @@ public class App {
     private String name;
     private String path;
     private String file;
-    private List<String> autoExec;
+    private int download;
+    private String[] autoExec;
 }

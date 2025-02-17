@@ -10,8 +10,12 @@ import xyz.tbvns.Apps.Object.App;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
@@ -45,7 +49,27 @@ public class MainWindow {
         main.setBorder(new EmptyBorder(10, 10, 10, 10));
         main.setLayout(new FlowLayout());
 
-        JTextField search = new JTextField(){{setPreferredSize(new Dimension(330, 30));}};
+        JTextField search = new JTextField(){{
+            setPreferredSize(new Dimension(330, 30));
+            addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    String text = getText() + e.getKeyChar();
+                    appPanel.removeAll();
+                    for (App app : Utils.searchFilter(AppListManager.listApps(), text)) {
+                        appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                        appPanel.add(new JSeparator());
+                    }
+                    appPanel.revalidate();
+                }
+                @Override public void keyPressed(KeyEvent e) {
+
+                }
+                @Override public void keyReleased(KeyEvent e) {
+
+                }
+            });
+        }};
         BufferedImage image = ImageIO.read(Main.class.getResource("/Icons/search.png"));
         ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         TextPrompt searchPrompt = new TextPrompt("Search", search);
@@ -57,28 +81,34 @@ public class MainWindow {
             add(new JLabel("Order:"));
             add(new JComboBox<>(new String[]{"Download", "Stars", "A-Z", "Z-A"}){{
                 addActionListener(a -> {
+                    appPanel.removeAll();
                     switch (getSelectedIndex()) {
                         case 0 -> {
                             for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.download)) {
-                                appPanel.add(AppListManager.appElementHashMap.get(app));
+                                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                                appPanel.add(new JSeparator());
                             }
                         }
                         case 1 -> {
                             for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.stars)) {
-                                appPanel.add(AppListManager.appElementHashMap.get(app));
+                                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                                appPanel.add(new JSeparator());
                             }
                         }
                         case 3 -> {
                             for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.ZA)) {
-                                appPanel.add(AppListManager.appElementHashMap.get(app));
+                                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                                appPanel.add(new JSeparator());
                             }
                         }
                         default -> {
                             for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.AZ)) {
-                                appPanel.add(AppListManager.appElementHashMap.get(app));
+                                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                                appPanel.add(new JSeparator());
                             }
                         }
                     }
+                    appPanel.revalidate();
                 });
             }});
             add(new JSeparator(SwingConstants.VERTICAL));
@@ -127,6 +157,7 @@ public class MainWindow {
 
         for (AppElement app : AppListManager.retrieveApps()) {
             appPanel.add(app);
+            appPanel.add(new JSeparator());
         }
 
         main.add(appPane);

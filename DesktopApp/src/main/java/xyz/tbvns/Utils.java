@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Utils {
     @SneakyThrows
@@ -61,27 +62,63 @@ public class Utils {
     public static List<App> sort(List<App> apps, appSortType type) {
         switch (type) {
             case download -> {
-                return apps.stream()
+                return new ArrayList<>(apps.stream()
                         .sorted(Comparator.comparing(App::getDownload))
-                        .toList();
+                        .toList()){{
+                            Collections.reverse(this);
+                }};
             }
             case stars -> {
-                return apps.stream()
+                return new ArrayList<>(apps.stream()
                         .sorted(Comparator.comparingInt(App::getStars))
-                        .toList();
+                        .toList()){{
+                            Collections.reverse(this);
+                }};
             }
             case AZ -> {
-                return apps.stream()
+                return new ArrayList<>(apps.stream()
                         .sorted(Comparator.comparing(App::getName))
-                        .toList();
+                        .toList());
             }
             default -> {
-                List<App> l = apps.stream()
+                return new ArrayList<>(apps.stream()
                         .sorted(Comparator.comparing(App::getName))
-                        .toList();
-                Collections.reverse(l);
-                return l;
+                        .toList()){{
+                            Collections.reverse(this);
+                }};
             }
+        }
+    }
+
+    public static List<App> searchFilter(List<App> apps, String prompt) {
+        HashMap<App, Integer> score = new HashMap<>();
+        for (App app : apps) {
+            score.put(app,
+                    getScoreFor(app.getName(), prompt) * 4 +
+                    getScoreFor(app.getDesc(), prompt) * 2 +
+                    getScoreFor(app.getPath(), prompt)
+            );
+            System.out.println(app.getPath() + ":" + score.get(app));
+        }
+        return new ArrayList<>(score.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList())){{
+                    Collections.reverse(this);
+        }};
+    }
+
+    public static int getScoreFor(String str1, String str2) {
+        str1 = str1.replace(" ", "").strip().toLowerCase();
+        str2 = str2.replace(" ", "").strip().toLowerCase();
+
+        if (str1.equals(str2)) {
+            return 2;
+        } else if (str1.contains(str2)) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 }

@@ -14,6 +14,9 @@ import xyz.tbvns.Constant;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -34,7 +37,6 @@ public class AppElement extends JPanel {
         this.app = app;
         app.retrievePublicInfo();
         offline = false;
-        setBorder(new LineBorder(Color.DARK_GRAY, 1));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         Image logo = ImageIO.read(AppElement.class.getResourceAsStream("/Icons/broken.png")).getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 
@@ -65,6 +67,7 @@ public class AppElement extends JPanel {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         add(rightPanel);
 
+
         setSize(280, 100);
     }
 
@@ -72,7 +75,6 @@ public class AppElement extends JPanel {
     public AppElement(InstalledApp app) {
         this.app = app.app;
         offline = true;
-        setBorder(new LineBorder(Color.DARK_GRAY, 1));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         Image logo = ImageIO.read(AppElement.class.getResourceAsStream("/Icons/broken.png")).getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 

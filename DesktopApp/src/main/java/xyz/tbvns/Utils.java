@@ -98,7 +98,6 @@ public class Utils {
                     getScoreFor(app.getDesc(), prompt) * 2 +
                     getScoreFor(app.getPath(), prompt)
             );
-            System.out.println(app.getPath() + ":" + score.get(app));
         }
         return new ArrayList<>(score.entrySet()
                 .stream()

@@ -19,6 +19,8 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static xyz.tbvns.UI.WindowUtils.icon;
 
@@ -26,6 +28,7 @@ import static xyz.tbvns.UI.WindowUtils.icon;
 public class MainWindow {
     public static boolean isShown = false;
     public static JPanel appPanel;
+    public static JScrollPane appPane;
     @SneakyThrows
     public static void show() {
         if (isShown) return;
@@ -109,6 +112,7 @@ public class MainWindow {
                         }
                     }
                     appPanel.revalidate();
+                    appPanel.repaint();
                 });
             }});
             add(new JSeparator(SwingConstants.VERTICAL));
@@ -157,7 +161,8 @@ public class MainWindow {
 
         appPanel = new JPanel();
         appPanel.setLayout(new BoxLayout(appPanel, BoxLayout.Y_AXIS));
-        JScrollPane appPane = new JScrollPane(appPanel);
+        appPanel.setPreferredSize(new Dimension(frame.getSize().width - 20, 350)); //TODO: fix the size of the pane
+        appPane = new JScrollPane(appPanel);
 
         for (AppElement app : AppListManager.retrieveApps()) {
             appPanel.add(app);
@@ -177,5 +182,26 @@ public class MainWindow {
             setDaemon(true);
             start();
         }};
+    }
+
+    public static void reloadFromFilters() {
+        appPanel.removeAll();
+        int count = 0;
+        for (App app : AppListManager.listApps()) {
+            if (
+                    new HashSet<>(Arrays.stream(app.getTags()).toList()).containsAll(FilterUI.selectedTags) &&
+                    (FilterUI.selectedCategory.equals("All") || FilterUI.selectedCategory.equals(app.getCategory()))
+            ) {
+                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                appPanel.add(new JSeparator());
+                count++;
+            }
+        }
+        if (count == 0) {
+            appPanel.add(new JLabel("No result."));
+        }
+
+        appPanel.revalidate();
+        appPanel.repaint();
     }
 }

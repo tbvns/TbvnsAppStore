@@ -25,7 +25,6 @@ public class Communicator implements Runnable {
         try (ChronicleQueue queue = SingleChronicleQueueBuilder.binary(queuePath).build()) {
             ExcerptAppender appender = queue.createAppender();
             appender.writeDocument(w -> w.write("flag").text("true"));
-            System.out.println("Sender: Flag sent.");
             appender.close();
         }
     }
@@ -35,13 +34,10 @@ public class Communicator implements Runnable {
     public void run() {
         try (ChronicleQueue queue = SingleChronicleQueueBuilder.binary(queuePath).build()) {
             ExcerptTailer tailer = queue.createTailer();
-            System.out.println("Receiver started. Polling every 50ms...");
-
             while (running) {
                 boolean found = tailer.readDocument(doc -> {
                     String message = doc.read("flag").text();
                     if (message != null && !message.isEmpty()) {
-                        System.out.println("Receiver: Flag detected: " + message);
                         MainWindow.show();
                     }
                 });
@@ -53,7 +49,6 @@ public class Communicator implements Runnable {
 
             tailer.close();
         } catch (InterruptedException e) {
-            System.out.println("Receiver thread interrupted, exiting.");
             Thread.currentThread().interrupt();
         }
     }

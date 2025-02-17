@@ -47,17 +47,14 @@ public class Main {
         for (OSProcess osProcess : lsp) {
             if (osProcess.getCommandLine().equals(cmd) || osProcess.getCommandLine().equals(cmd + " autostart")) {
                 count++;
-                System.out.println(count);
                 if (count >= 2) {
                     break;
                 }
             }
         }
         if (count > 1) {
-            System.out.println("Already running !");
             return true;
         }
-        System.out.println("Not already running");
         return false;
     }
 

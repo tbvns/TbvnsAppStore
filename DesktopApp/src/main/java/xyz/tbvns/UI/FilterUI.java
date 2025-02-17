@@ -1,25 +1,43 @@
 package xyz.tbvns.UI;
 
+import xyz.tbvns.Apps.Manager.AppListManager;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FilterUI {
+    public static String selectedCategory = "All";
+    public static List<String> selectedTags = new ArrayList<>();
+
     public static void show() {
         JFrame frame = new JFrame("Filters");
-        frame.setSize(200, 150);
+        frame.setSize(250, 250);
         frame.setResizable(false);
         WindowUtils.setIcon(frame, WindowUtils.Icons.normal);
         WindowUtils.center(frame);
 
         JPanel panel = new JPanel() {{
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBorder(new EmptyBorder(10, 10, 10, 10));
+
+            AtomicReference<String> category = new AtomicReference<>("all");
 
             // Category Panel
             add(new JPanel(new BorderLayout()) {{
                 add(new JLabel("Category:"), BorderLayout.WEST);
-                JComboBox<String> comboBox = new JComboBox<>(new String[]{"Coming", "Soon", "yay"});
+                ArrayList<String> categories = new ArrayList<>();
+                categories.add("All");
+                categories.addAll(AppListManager.categories);
+                JComboBox<String> comboBox = new JComboBox<>(categories.toArray(new String[0])){{
+                    addActionListener(a -> category.set(categories.get(getSelectedIndex())));
+                }};
                 add(comboBox, BorderLayout.EAST);
                 setMaximumSize(new Dimension(Short.MAX_VALUE, comboBox.getPreferredSize().height));
+                setBorder(new EmptyBorder(0, 0, 5, 0));
             }});
 
             // Separator
@@ -27,28 +45,48 @@ public class FilterUI {
                 setMaximumSize(new Dimension(Short.MAX_VALUE, getPreferredSize().height));
             }});
 
-            // Tags Label Panel - constrain maximum size to preferred size
-            add(new JPanel(new FlowLayout(FlowLayout.LEFT)) {{
+            // Tags Label Panel
+            add(new JPanel() {{
                 add(new JLabel("Tags:"));
                 setMaximumSize(getPreferredSize());
             }});
 
-            // Select Panel
-            add(new JPanel(new BorderLayout()) {{
-                add(new JLabel("Add:"), BorderLayout.WEST);
-                JComboBox<String> comboBox = new JComboBox<>(new String[]{"Coming", "Soon", "yay"});
-                add(comboBox, BorderLayout.EAST);
-                setMaximumSize(new Dimension(Short.MAX_VALUE, comboBox.getPreferredSize().height));
-            }});
+            List<JCheckBox> boxes = new ArrayList<>();
 
-            // Selected Panel
-            add(new JPanel(new BorderLayout()) {{
-                add(new JLabel("Remove:"), BorderLayout.WEST);
-                JComboBox<String> comboBox = new JComboBox<>(new String[]{"Coming", "Soon", "yay"});
-                add(comboBox, BorderLayout.EAST);
-                setMaximumSize(new Dimension(Short.MAX_VALUE, comboBox.getPreferredSize().height));
+            add(new JScrollPane(new JPanel() {{
+                setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+                for (String tag : AppListManager.tags) {
+                    JCheckBox box = new JCheckBox(tag);
+                    if (selectedTags.contains(tag)) box.setSelected(true);
+                    add(box);
+                    boxes.add(box);
+                }
+            }}));
+
+            // Glue to push button to bottom
+            add(Box.createVerticalGlue());
+
+            // Button Panel to center the button
+            add(new JPanel(new FlowLayout(FlowLayout.CENTER)){{
+                JButton applyButton = new JButton("Apply"){{
+                    addActionListener(a -> {
+                        selectedCategory = category.get();
+                        selectedTags = boxes.stream()
+                                .filter(JCheckBox::isSelected)
+                                .map(JCheckBox::getText)
+                                .toList();
+                        MainWindow.reloadFromFilters();
+                        frame.dispose();
+                    });
+                    Dimension buttonSize = new Dimension(frame.getSize().width - 20, 30);
+                    setPreferredSize(buttonSize);
+                    setMinimumSize(buttonSize);
+                    setMaximumSize(buttonSize);
+                }};
+                add(applyButton);
             }});
         }};
+
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 

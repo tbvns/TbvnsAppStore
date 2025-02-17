@@ -64,7 +64,6 @@ public class AppManager {
                         httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
                         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
                             int statusCode = response.getCode();
-                            System.out.println("Response Code: " + statusCode);
                             if (statusCode != 200) log.warn("Error while sending download: status code {}", statusCode);
                         }
                     } catch (Exception e) {

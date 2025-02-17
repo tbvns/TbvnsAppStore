@@ -8,7 +8,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 import java.net.URL;
 
-public class Github {
+public class Github { //TODO: We are rate limited to 60 request per hours. We need to cache data to prevent rate limiting
     @SneakyThrows
     public static GitRepoInfo getInfo(String repo) {
         String url = "https://api.github.com/repos/" + repo;

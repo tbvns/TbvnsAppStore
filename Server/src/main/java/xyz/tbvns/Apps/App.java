@@ -16,4 +16,6 @@ public class App {
     private String file;
     private int download;
     private String[] autoExec;
+    private String category;
+    private String[] tags;
 }

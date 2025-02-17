@@ -113,7 +113,11 @@ public class MainWindow {
             }});
             add(new JSeparator(SwingConstants.VERTICAL));
             add(new JLabel(" Filters:"));
-            add(new JButton("Select"));
+            add(new JButton("Select"){{
+                addActionListener(a -> {
+                    FilterUI.show();
+                });
+            }});
             add(new JButton("Reset"));
         }};
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));

@@ -27,6 +27,8 @@ public class App {
     private String file;
     private int download;
     private String[] autoExec = new String[]{};
+    private String category;
+    private String[] tags;
 
     @JsonIgnore
     private int stars;

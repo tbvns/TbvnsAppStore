@@ -16,6 +16,13 @@ public class AppsConfig implements Config {
                     0,
                     new String[]{
                             "VALORANT"
+                    },
+                    "Gaming",
+                    new String[]{
+                            "Companion app",
+                            "Game enhancement",
+                            "Skill improvement",
+                            "Esports"
                     }
             )
     };

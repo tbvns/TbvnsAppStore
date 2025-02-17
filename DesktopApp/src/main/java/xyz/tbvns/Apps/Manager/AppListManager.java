@@ -15,14 +15,13 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 public class AppListManager {
     public static final HashMap<String, AppElement> appElementHashMap = new HashMap<>();
+    public static final List<String> categories = new ArrayList<>();
+    public static final List<String> tags = new ArrayList<>();
     private static List<App> apps = new ArrayList<>();
 
     //TODO: implement caching
@@ -35,6 +34,10 @@ public class AppListManager {
             apps = mapper.readValue(json, new TypeReference<List<App>>() {});
             for (App app : apps) {
                 AppElement element = new AppElement(app);
+                if (!categories.contains(app.getCategory())) categories.add(app.getCategory());
+                Arrays.stream(app.getTags())
+                        .filter(a -> !tags.contains(a))
+                        .forEach(tags::add);
                 appElementHashMap.put(app.getPath(), element);
             }
             log.info("Retrieved {} app(s) from the server", appElementHashMap.keySet().size());

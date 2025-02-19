@@ -122,7 +122,6 @@ public class MainWindow {
                     FilterUI.show();
                 });
             }});
-            add(new JButton("Reset"));
         }};
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
         main.add(filterPanel);

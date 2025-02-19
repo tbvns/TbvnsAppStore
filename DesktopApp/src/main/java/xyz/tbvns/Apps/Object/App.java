@@ -10,12 +10,10 @@ import xyz.tbvns.Api.Github;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Constant;
 
-import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.net.URL;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -52,6 +50,13 @@ public class App {
 
     public InstalledApp asInstalledApp() {
         return new InstalledApp(id, path, name, desc, this);
+    }
+
+    public boolean updateAvailable() {
+        if (isInstalled()) {
+            return Github.getLatestTag(this).equals(DownloadedApps.version.get(path));
+        }
+        return false;
     }
 
     @SneakyThrows

@@ -60,6 +60,8 @@ public class AppElement extends JPanel {
         JPanel rightPanel;
         if (!app.isInstalled()) {
             rightPanel = createNotInstalled(app);
+        } else if (app.updateAvailable()) {
+            rightPanel = createUpdateAvailable(app);
         } else {
             rightPanel = createInstalled(app);
         }
@@ -141,6 +143,46 @@ public class AppElement extends JPanel {
             setAlignmentX(RIGHT_ALIGNMENT);
         }};
     }
+
+    public JPanel createUpdateAvailable(App app) {
+        return new JPanel(){{
+            add(new JButton("Settings"){{
+                setAlignmentX(RIGHT_ALIGNMENT);
+                addActionListener(a -> {
+                    SettingsManager.showSettings(app);
+                });
+                dlButton = this;
+            }});
+            add(new JButton("Update"){{
+                setAlignmentX(RIGHT_ALIGNMENT);
+                setBackground(new Color(0, 160, 209));
+                addActionListener(a -> {
+                    setText("Loading");
+                    new Thread(() -> {
+                        if (!AppManager.install(app)) {
+                            setText("Update");
+                            return;
+                        }
+
+                        setText("Settings");
+                        for (ActionListener listener : getActionListeners()) {
+                            removeActionListener(listener);
+                        }
+                        addActionListener(b -> {
+                            SettingsManager.showSettings(app);
+                        });
+                    }){{
+                        setName(app.getName() + "-dlThread");
+                    }}.start();
+                });
+                dlButton = this;
+            }});
+            add(new JLabel("<html><b>" + app.getDownload() + "</b> Download</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
+            add(new JLabel("<html><b>"+ app.getStars() +"</b> Stars</html>"){{setAlignmentX(RIGHT_ALIGNMENT);}});
+            setAlignmentX(RIGHT_ALIGNMENT);
+        }};
+    }
+
 
     public JPanel createInstalled(App app) {
         return new JPanel(){{

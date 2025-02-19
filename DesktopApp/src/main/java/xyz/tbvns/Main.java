@@ -42,10 +42,9 @@ public class Main {
 
     public static boolean isAlreadyRunning() {
         List<OSProcess> lsp = new SystemInfo().getOperatingSystem().getProcesses();
-        String cmd = new SystemInfo().getOperatingSystem().getCurrentProcess().getCommandLine();
         int count = 0;
         for (OSProcess osProcess : lsp) {
-            if (osProcess.getCommandLine().equals(cmd) || osProcess.getCommandLine().equals(cmd + " autostart")) {
+            if (osProcess.getCommandLine().contains(Constant.javaBin)) {
                 count++;
                 if (count >= 2) {
                     break;

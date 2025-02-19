@@ -160,13 +160,19 @@ public class MainWindow {
 
         appPanel = new JPanel();
         appPanel.setLayout(new BoxLayout(appPanel, BoxLayout.Y_AXIS));
-        appPanel.setPreferredSize(new Dimension(frame.getSize().width - 20, 350)); //TODO: fix the size of the pane
+
         appPane = new JScrollPane(appPanel);
+        appPane.setPreferredSize(new Dimension(frame.getWidth() - 20, 370));  // Set size on scroll pane instead
+        appPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         for (AppElement app : AppListManager.retrieveApps()) {
             appPanel.add(app);
-            appPanel.add(new JSeparator());
+            appPane.add(new JSeparator());
+            appPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         }
+
+        appPanel.revalidate();
+        appPanel.repaint();
 
         main.add(appPane);
 

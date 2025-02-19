@@ -1,7 +1,7 @@
 ![tbvnsappstorebanner](https://github.com/user-attachments/assets/7d3695ec-6a12-472f-b45f-5f37f694f69e)
 # Tbvns's App Store 🛒
 
-**Slogan**: *"A hassle-free way to distribute my code!"* 🚀  
+### *"A hassle-free way to distribute my code!"* 🚀  
 
 Tbvns's App Store is a lightweight, cross-platform application store designed to simplify the distribution and management of **my own software and games**. Built with **Java** and **Maven**, it provides a seamless experience for users to discover, install, and update my apps and games with ease.  
 

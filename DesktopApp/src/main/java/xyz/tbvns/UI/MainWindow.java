@@ -148,6 +148,9 @@ public class MainWindow {
         menuBar.add(new JMenu("Help"){{
             JMenuItem item = add("About");
             item.setIcon(icon("info"));
+            item.addActionListener(a -> {
+                AboutWindow.show();
+            });
             item = add("Donate");
             item.setIcon(icon("donate"));
             item.addActionListener(a -> {

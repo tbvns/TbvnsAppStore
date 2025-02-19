@@ -24,7 +24,7 @@ public class FilterUI {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             setBorder(new EmptyBorder(10, 10, 10, 10));
 
-            AtomicReference<String> category = new AtomicReference<>("all");
+            AtomicReference<String> category = new AtomicReference<>("All");
 
             // Category Panel
             add(new JPanel(new BorderLayout()) {{

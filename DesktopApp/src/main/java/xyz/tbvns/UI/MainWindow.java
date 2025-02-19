@@ -81,46 +81,57 @@ public class MainWindow {
         main.add(search);
 
         JPanel filterPanel = new JPanel(){{
-            add(new JLabel("Order:"));
-            add(new JComboBox<>(new String[]{"Download", "Stars", "A-Z", "Z-A"}){{
-                addActionListener(a -> {
-                    appPanel.removeAll();
-                    switch (getSelectedIndex()) {
-                        case 0 -> {
-                            for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.download)) {
-                                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
-                                appPanel.add(new JSeparator());
+            add(new JPanel() {{
+                setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
+                // Left-aligned order controls
+                add(new JLabel("Order:"));
+                add(Box.createHorizontalStrut(5));
+                add(new JComboBox<>(new String[]{"Download", "Stars", "A-Z", "Z-A"}) {{
+                    addActionListener(a -> {
+                        appPanel.removeAll();
+                        switch (getSelectedIndex()) {
+                            case 0 -> {
+                                for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.download)) {
+                                    appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                                    appPanel.add(new JSeparator());
+                                }
+                            }
+                            case 1 -> {
+                                for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.stars)) {
+                                    appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                                    appPanel.add(new JSeparator());
+                                }
+                            }
+                            case 3 -> {
+                                for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.ZA)) {
+                                    appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                                    appPanel.add(new JSeparator());
+                                }
+                            }
+                            default -> {
+                                for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.AZ)) {
+                                    appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
+                                    appPanel.add(new JSeparator());
+                                }
                             }
                         }
-                        case 1 -> {
-                            for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.stars)) {
-                                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
-                                appPanel.add(new JSeparator());
-                            }
-                        }
-                        case 3 -> {
-                            for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.ZA)) {
-                                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
-                                appPanel.add(new JSeparator());
-                            }
-                        }
-                        default -> {
-                            for (App app : Utils.sort(AppListManager.listApps(), Utils.appSortType.AZ)) {
-                                appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));
-                                appPanel.add(new JSeparator());
-                            }
-                        }
-                    }
-                    appPanel.revalidate();
-                    appPanel.repaint();
-                });
-            }});
-            add(new JSeparator(SwingConstants.VERTICAL));
-            add(new JLabel(" Filters:"));
-            add(new JButton("Select"){{
-                addActionListener(a -> {
-                    FilterUI.show();
-                });
+                        appPanel.revalidate();
+                        appPanel.repaint();
+                    });
+                }});
+
+                // Vertical separator with spacing
+                add(Box.createHorizontalStrut(10));
+                add(new JSeparator(SwingConstants.VERTICAL));
+
+                // Right-aligned filter controls
+                add(Box.createHorizontalGlue());
+                add(new JLabel(" Filters:"));
+                add(Box.createHorizontalStrut(5));
+                add(new JButton("Select") {{
+                    addActionListener(a -> FilterUI.show());
+                }});
             }});
         }};
         filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.X_AXIS));
@@ -194,7 +205,7 @@ public class MainWindow {
         int count = 0;
         for (App app : AppListManager.listApps()) {
             if (
-                    new HashSet<>(Arrays.stream(app.getTags()).toList()).containsAll(FilterUI.selectedTags) &&
+                    Arrays.stream(app.getTags()).toList().containsAll(FilterUI.selectedTags) &&
                     (FilterUI.selectedCategory.equals("All") || FilterUI.selectedCategory.equals(app.getCategory()))
             ) {
                 appPanel.add(AppListManager.appElementHashMap.get(app.getPath()));

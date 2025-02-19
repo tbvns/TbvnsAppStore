@@ -7,7 +7,7 @@ import java.io.File;
 
 @Slf4j
 public class Constant {
-    public static final String serverUrl = "http://localhost:8080";
+    public static final String serverUrl = "https://api.tbvns.xyz";
     public static String mainFolder;
     public static String appFolder;
     public static String javaBin;

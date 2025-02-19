@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import xyz.tbvns.Apps.Object.App;
 import xyz.tbvns.Apps.Object.InstalledApp;
 import xyz.tbvns.Configs.DownloadedApps;
+import xyz.tbvns.Constant;
 import xyz.tbvns.ErrorHandler;
 import xyz.tbvns.UI.AppElement;
 
@@ -28,7 +29,7 @@ public class AppListManager {
     @SneakyThrows
     public static Collection<AppElement> retrieveApps() {
         try {
-            InputStream in = new URL("http://localhost:8080/apps/list").openStream();
+            InputStream in = new URL(Constant.serverUrl + "/apps/list").openStream();
             String json = IOUtils.toString(in);
             ObjectMapper mapper = new ObjectMapper();
             apps = mapper.readValue(json, new TypeReference<List<App>>() {});

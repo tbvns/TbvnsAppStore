@@ -60,7 +60,9 @@ public class Github { //TODO: We are rate limited to 60 request per hours. We ne
 
         String url = "https://api.github.com/repos/" + app.getPath() + "/releases/latest";
         InputStream in = new URL(url).openStream();
-        String json = IOUtils.toString(in);
+        String json = new String(in.readAllBytes());
+
+        System.out.println(json);
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(json);

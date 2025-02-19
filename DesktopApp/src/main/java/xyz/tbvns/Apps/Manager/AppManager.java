@@ -9,6 +9,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import xyz.tbvns.Api.Github;
 import xyz.tbvns.Apps.Object.App;
 import xyz.tbvns.Configs.DownloadedApps;
 import xyz.tbvns.Constant;
@@ -65,7 +66,7 @@ public class AppManager {
                         try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
                             int statusCode = response.getCode();
                             if (statusCode != 200) log.warn("Error while sending download: status code {}", statusCode);
-                            DownloadedApps.version.put(app.getPath(), object.getString("tag_name"));
+                            DownloadedApps.version.put(app.getPath(), Github.getLatestTag(app));
                         }
                     } catch (Exception e) {
                         ErrorHandler.handle(e, false);

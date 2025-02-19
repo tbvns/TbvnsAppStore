@@ -71,6 +71,8 @@ public class AppElement extends JPanel {
 
 
         setSize(280, 100);
+        setPreferredSize(new Dimension(280, 100));
+        setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
     }
 
     @SneakyThrows
@@ -101,6 +103,8 @@ public class AppElement extends JPanel {
         add(rightPanel);
 
         setSize(280, 100);
+        setPreferredSize(new Dimension(280, 100));
+        setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
     }
 
     public JPanel createNotInstalled(App app) {

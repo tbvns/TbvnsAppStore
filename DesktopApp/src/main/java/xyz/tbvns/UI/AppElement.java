@@ -110,6 +110,9 @@ public class AppElement extends JPanel {
     public JPanel createNotInstalled(App app) {
         return new JPanel(){{
             add(new JButton("Install"){{
+                setPreferredSize(new Dimension(83, 30));
+                setMaximumSize(new Dimension(83, 30));
+                setMinimumSize(new Dimension(83, 30));
                 setAlignmentX(RIGHT_ALIGNMENT);
                 addActionListener(a -> {
                     setText("Loading");
@@ -133,6 +136,9 @@ public class AppElement extends JPanel {
                 dlButton = this;
             }});
             add(new JButton("Source"){{
+                setPreferredSize(new Dimension(83, 30));
+                setMaximumSize(new Dimension(83, 30));
+                setMinimumSize(new Dimension(83, 30));
                 setAlignmentX(RIGHT_ALIGNMENT);
                 addActionListener(a -> {
                     try {
@@ -151,6 +157,9 @@ public class AppElement extends JPanel {
     public JPanel createUpdateAvailable(App app) {
         return new JPanel(){{
             add(new JButton("Settings"){{
+                setPreferredSize(new Dimension(83, 30));
+                setMaximumSize(new Dimension(83, 30));
+                setMinimumSize(new Dimension(83, 30));
                 setAlignmentX(RIGHT_ALIGNMENT);
                 addActionListener(a -> {
                     SettingsManager.showSettings(app);
@@ -158,8 +167,11 @@ public class AppElement extends JPanel {
                 dlButton = this;
             }});
             add(new JButton("Update"){{
+                setPreferredSize(new Dimension(83, 30));
+                setMaximumSize(new Dimension(83, 30));
+                setMinimumSize(new Dimension(83, 30));
                 setAlignmentX(RIGHT_ALIGNMENT);
-                setBackground(new Color(0, 160, 209));
+                setBackground(new Color(0, 113, 149));
                 addActionListener(a -> {
                     setText("Loading");
                     new Thread(() -> {
@@ -168,12 +180,17 @@ public class AppElement extends JPanel {
                             return;
                         }
 
-                        setText("Settings");
+                        setText("Source");
+                        setBackground(new JButton().getBackground());
                         for (ActionListener listener : getActionListeners()) {
                             removeActionListener(listener);
                         }
                         addActionListener(b -> {
-                            SettingsManager.showSettings(app);
+                            try {
+                                Desktop.getDesktop().browse(URI.create("https://github.com/" + app.getPath()));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         });
                     }){{
                         setName(app.getName() + "-dlThread");
@@ -191,6 +208,9 @@ public class AppElement extends JPanel {
     public JPanel createInstalled(App app) {
         return new JPanel(){{
             add(new JButton("Settings"){{
+                setPreferredSize(new Dimension(83, 30));
+                setMaximumSize(new Dimension(83, 30));
+                setMinimumSize(new Dimension(83, 30));
                 setAlignmentX(RIGHT_ALIGNMENT);
                 addActionListener(a -> {
                     SettingsManager.showSettings(app);
@@ -198,6 +218,9 @@ public class AppElement extends JPanel {
                 dlButton = this;
             }});
             add(new JButton("Source"){{
+                setPreferredSize(new Dimension(83, 30));
+                setMaximumSize(new Dimension(83, 30));
+                setMinimumSize(new Dimension(83, 30));
                 setAlignmentX(RIGHT_ALIGNMENT);
                 addActionListener(a -> {
                     try {
@@ -216,6 +239,9 @@ public class AppElement extends JPanel {
     public JPanel createInstallNoConnection(InstalledApp app) {
         return new JPanel(){{
             add(new JButton("Settings"){{
+                setPreferredSize(new Dimension(83, 30));
+                setMaximumSize(new Dimension(83, 30));
+                setMinimumSize(new Dimension(83, 30));
                 setAlignmentX(RIGHT_ALIGNMENT);
                 addActionListener(a -> {
                     SettingsManager.showSettings(app.app);
@@ -223,6 +249,9 @@ public class AppElement extends JPanel {
                 dlButton = this;
             }});
             add(new JButton("Source"){{
+                setPreferredSize(new Dimension(83, 30));
+                setMaximumSize(new Dimension(83, 30));
+                setMinimumSize(new Dimension(83, 30));
                 setAlignmentX(RIGHT_ALIGNMENT);
                 addActionListener(a -> {
                     try {

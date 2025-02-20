@@ -54,7 +54,7 @@ public class App {
 
     public boolean updateAvailable() {
         if (isInstalled()) {
-            return Github.getLatestTag(this).equals(DownloadedApps.version.get(path));
+            return !Github.getLatestTag(this).equals(DownloadedApps.version.get(path));
         }
         return false;
     }

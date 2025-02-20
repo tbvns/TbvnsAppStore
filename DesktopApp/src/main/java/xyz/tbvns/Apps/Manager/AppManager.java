@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 public class AppManager {
@@ -58,7 +60,6 @@ public class AppManager {
                         ErrorHandler.warn("Could not download icon: " + e.getMessage());
                     }
 
-                    //TODO: rate limiter currently filters for every id and not per id
                     URL url = new URL(Constant.serverUrl + "/apps/download?id=" + app.getId());
                     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
                         HttpPost httpPost = new HttpPost(String.valueOf(url));
@@ -71,6 +72,10 @@ public class AppManager {
                     } catch (Exception e) {
                         ErrorHandler.handle(e, false);
                     }
+
+                    Arrays.stream(DownloadedApps.list)
+                            .filter(a -> a.getPath().equals(app.getPath()))
+                            .forEach(DownloadedApps::remove);
 
                     DownloadedApps.add(app.asInstalledApp());
                     EZConfig.save();

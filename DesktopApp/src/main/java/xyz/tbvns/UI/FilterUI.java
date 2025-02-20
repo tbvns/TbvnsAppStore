@@ -78,7 +78,7 @@ public class FilterUI {
                         MainWindow.reloadFromFilters();
                         frame.dispose();
                     });
-                    Dimension buttonSize = new Dimension(frame.getSize().width - 20, 30);
+                    Dimension buttonSize = new Dimension(frame.getSize().width - 40, 30);
                     setPreferredSize(buttonSize);
                     setMinimumSize(buttonSize);
                     setMaximumSize(buttonSize);
